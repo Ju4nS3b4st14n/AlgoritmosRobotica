@@ -1,4 +1,5 @@
 # AlgoritmosRobotica
 
-Juan Sebastian Torres Rincón \n
-Fabian Vasquez Suarez
+# Integrantes:
+* Juan Sebastian Torres Rincón - 69883
+* Fabian Vasquez Suarez
