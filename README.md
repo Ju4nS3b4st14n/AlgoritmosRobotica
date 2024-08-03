@@ -1,4 +1,4 @@
 # AlgoritmosRobotica
 
-Juan Sebastian Torres Rincón
+Juan Sebastian Torres Rincón \n
 Fabian Vasquez Suarez
