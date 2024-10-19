@@ -1,4 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import matplotlib
+matplotlib.use('Qt5Agg')
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -56,16 +59,16 @@ class Ui_MainWindow(object):
         # Define las rutas de las imágenes según la opción seleccionada
         if seleccion == "Cartesiano":
             print("Cartesiano")
-            imagen_path = "Imagenes/Cartesiano.jpeg"
+            imagen_path = "Cartesiano.jpeg"
             self.label.setText("tiene 3 articulaciones tipo Prismaticas")
 
         elif seleccion == "Esférico":
-            imagen_path = "Imagenes/Esferico.jpeg"
+            imagen_path = "Esferico.jpeg"
             self.label.setText("tiene 3 articulaciones una Prismaticas y dos rotacionales")
             
         elif seleccion == "Cilindrico":
             print("Cilindrico")
-            imagen_path = "Imagenes/Cilindrico.jpeg"
+            imagen_path = "Cilindrico.jpeg"
             self.label.setText("tiene 3 articulaciones dos Prismaticas y una rotacional")
 
         else:

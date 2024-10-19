@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -215,15 +217,15 @@ class Ui_MainWindow(object):
         if seleccion == "Seno":
             self.Seno(min, max, ax)
         if seleccion == "Coseno":
-            self.Coseno(min, max)
+            self.Coseno(min, max, ax)
         if seleccion == "Tangente":
-            self.Tangente(min, max)
+            self.Tangente(min, max, ax)
         if seleccion == "Cotangente":
-            self.Cotangente(min, max)
+            self.Cotangente(min, max, ax)
         if seleccion == "Secante":
-            self.Secante(min, max)
+            self.Secante(min, max, ax)
         if seleccion == "Cosecante":
-            self.Cosecante(min, max)
+            self.Cosecante(min, max, ax)
 
 if __name__ == "__main__":
     import sys
