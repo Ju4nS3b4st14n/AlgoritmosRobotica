@@ -22,6 +22,9 @@ class Ui_MainWindow(object):
         self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_2.setGeometry(QtCore.QRect(220, 70, 104, 25))
         self.textEdit_2.setObjectName("textEdit_2")
+        self.textEdit_3 = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_3.setGeometry(QtCore.QRect(290, 500, 191, 25))
+        self.textEdit_3.setObjectName("textEdit")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(180, 40, 21, 25))
         self.label.setObjectName("label")
@@ -62,8 +65,11 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(340, 118, 89, 25))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(340, 530, 89, 25))
+        self.pushButton_2.setObjectName("pushButton")
         self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_2.setGeometry(QtCore.QRect(290, 550, 191, 25))
+        self.comboBox_2.setGeometry(QtCore.QRect(290, 470, 191, 25))
         self.comboBox_2.setObjectName("comboBox_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -98,12 +104,14 @@ class Ui_MainWindow(object):
         self.label_9.setText(_translate("MainWindow", "Reynaldo Alonso Alape"))
         self.label_10.setText(_translate("MainWindow", "Fabian Camilo Vasquez"))
         self.pushButton.setText(_translate("MainWindow", "Punto 2"))
+        self.pushButton_2.setText(_translate("MainWindow", "Punto 3"))
         self.comboBox_2.addItem("Selecciona un nombre")
         self.comboBox_2.addItem("ALONSO")
         self.comboBox_2.addItem("JUAN")
         self.comboBox_2.addItem("FABIAN")
 
         self.pushButton.clicked.connect(self.puntoDos)
+        self.pushButton_2.clicked.connect(self.puntoTres)
 
         self.textEdit.textChanged.connect(self.puntoUno)
         self.textEdit_2.textChanged.connect(self.puntoUno)
@@ -132,31 +140,40 @@ class Ui_MainWindow(object):
 
     def puntoDos(self):
 
-        for i in range(0, 181, 20):
+        for i in range(0, 170, 10):
             q1, q2, d = Bender(0,i)
             MoverServo(q1, q2)
             self.plot_path(None, None, d, i, False)
-            sleep(0.05)
+            sleep(0.15)
 
-        for i in range(160, -1, -20):
+        for i in range(160, -1, -10):
             q1, q2, d = Bender(0,i)
             MoverServo(q1, q2)
-            sleep(0.05)
+            sleep(0.15)
 
-        for i in range(0, 181, 20):
+        for i in range(0, 181, 10):
             q1, q2, d = Bender(i,0)
             MoverServo(q1, q2)
             self.plot_path(None, None, d, i, False)
-            sleep(0.05)
+            sleep(0.15)
 
-        for i in range(0, 181, 20):
+        for i in range(0, 170, 10):
             q1, q2, d = Bender(180,i)
             MoverServo(q1, q2)
             self.plot_path(None, None, d, i, False)
-            sleep(0.05)
+            sleep(0.15)
 
     def puntoTres(self, palabra):
-        nombre = palabra
+
+        nombre = self.textEdit_3.toPlainText()
+
+        if nombre != '':
+            if 6 <= len(nombre) <= 8:
+                palabra = nombre
+
+            else:
+                print("Caracteres incorrectos")
+                return
 
         coordenadas_x, coordenadas_y = Letras(palabra)
         d = numpy.zeros((3, len(coordenadas_x)))
@@ -166,6 +183,7 @@ class Ui_MainWindow(object):
             q1, q2, d = Tercero(x, y, i, d)
             MoverServo(q1, q2)
             self.plot_path(None, None, d, i, True)
+            sleep(0.15)
 
     def plot_path(self, x, y, d, i, line):
         if (x is None) and (y is None) and (line == False):

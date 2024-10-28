@@ -85,7 +85,7 @@ class Ui_MainWindow(object):
             self.selected_motor = None
             return
         if motor_id == "1":
-            self.selected_motor = 15
+            self.selected_motor = 8
 
         elif motor_id == "2":
             self.selected_motor = 14
@@ -104,7 +104,7 @@ class Ui_MainWindow(object):
         if angle == 180:
             angle = 178
 
-        pulse_width=int((angle/21)*(servo_max-servo_min)+servo_min) #28 para servomotor pequeño
+        pulse_width=int((angle/22)*(servo_max-servo_min)+servo_min) #28 para servomotor pequeño
         self.pca.channels[servo_pin].duty_cycle=pulse_width
 
 if __name__ == "__main__":

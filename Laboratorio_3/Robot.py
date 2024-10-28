@@ -18,12 +18,12 @@ def Robot(x, y):
     cos_theta2 = (b**2-l2**2-l1**2)/(2*l1*l2)
     sen_theta2 = math.sqrt(1-(cos_theta2)**2)#(+)codo abajo y (-)codo arriba
     theta2 = math.atan2(sen_theta2, cos_theta2)
-    print(f'theta 2 = {numpy.rad2deg(theta2):.4f}')
+    #print(f'theta 2 = {numpy.rad2deg(theta2):.4f}')
     # Theta 1
     alpha = math.atan2(Py,Px)
     phi = math.atan2(l2*sen_theta2, l1+l2*cos_theta2)
     theta1 = alpha - phi
-    print(f'theta 1 = {numpy.rad2deg(theta1):.4f}')
+    #print(f'theta 1 = {numpy.rad2deg(theta1):.4f}')
 
     if theta1 <= -numpy.pi:
         theta1 = (2*numpy.pi)+theta1
@@ -71,8 +71,8 @@ def Tercero(x, y, i, d):
     R.append(RevoluteDH(d=0, alpha=0, a=l2, offset=0))
     Robot = DHRobot(R, name='Bender')
     
-    Px = x/2-8
-    Py = y/2+4
+    Px = x/2.5-7
+    Py = y/2.5+6
 
     b = math.sqrt(Px**2+Py**2)
     # Theta 2

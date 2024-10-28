@@ -28,8 +28,10 @@ def MoverServo(q1, q2):
     if q2s == 180:
         q2s = 175
 
+    #Servomotor 2
     pulse_width=int((q1s/24)*(servo_max-servo_min)+servo_min) #28 para servomotor pequeño
     pca.channels[15].duty_cycle=pulse_width
         
-    pulse_width=int((q2s/21)*(servo_max-servo_min)+servo_min) #28 para servomotor pequeño
+    #Servomotor 1
+    pulse_width=int((q2s/24)*(servo_max-servo_min)+servo_min) #28 para servomotor pequeño
     pca.channels[14].duty_cycle=pulse_width
