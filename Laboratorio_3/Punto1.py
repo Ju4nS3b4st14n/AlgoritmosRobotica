@@ -9,6 +9,7 @@ import sys
 from Robot import *
 from MoverServo import *
 from Letras import *
+from Logos import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -68,6 +69,9 @@ class Ui_MainWindow(object):
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(340, 530, 89, 25))
         self.pushButton_2.setObjectName("pushButton")
+        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox.setGeometry(QtCore.QRect(290, 560, 191, 25))
+        self.comboBox.setObjectName("comboBox")
         self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_2.setGeometry(QtCore.QRect(290, 470, 191, 25))
         self.comboBox_2.setObjectName("comboBox_2")
@@ -105,6 +109,11 @@ class Ui_MainWindow(object):
         self.label_10.setText(_translate("MainWindow", "Fabian Camilo Vasquez"))
         self.pushButton.setText(_translate("MainWindow", "Punto 2"))
         self.pushButton_2.setText(_translate("MainWindow", "Punto 3"))
+        self.comboBox.addItem("Selecciona un logo")
+        self.comboBox.addItem("Puma")
+        self.comboBox.addItem("Toyota")
+        self.comboBox.addItem("Apple")
+        self.comboBox.addItem("Pepsi")
         self.comboBox_2.addItem("Selecciona un nombre")
         self.comboBox_2.addItem("ALONSO")
         self.comboBox_2.addItem("JUAN")
@@ -116,6 +125,7 @@ class Ui_MainWindow(object):
         self.textEdit.textChanged.connect(self.puntoUno)
         self.textEdit_2.textChanged.connect(self.puntoUno)
 
+        self.comboBox.currentTextChanged.connect(self.puntoCuatro)
         self.comboBox_2.currentTextChanged.connect(self.puntoTres)
 
     def puntoUno(self):
@@ -185,7 +195,31 @@ class Ui_MainWindow(object):
             self.plot_path(None, None, d, i, True)
             sleep(0.15)
 
+    def puntoCuatro(self, seleccion):
+
+        # Define las rutas de las imágenes según la opción seleccionada
+        if seleccion == "Puma":
+            # Leer la imagen con OpenCV
+            img = cv2.imread('/home/santana19/Documentos/AlgoritmosRobotica/Imagenes/puma.jpg')
+        elif seleccion == "Toyota":
+            img = cv2.imread('/home/santana19/Documentos/AlgoritmosRobotica/Imagenes/toyota.jpg')
+        elif seleccion == "Apple":
+            img = cv2.imread('/home/santana19/Documentos/AlgoritmosRobotica/Imagenes/apple.jpg')
+        elif seleccion == "Pepsi":
+            img = cv2.imread('/home/santana19/Documentos/AlgoritmosRobotica/Imagenes/pepsi.jpg')
+
+        coordenadas_x, coordenadas_y = Imagen(img)
+        d = numpy.zeros((3, len(coordenadas_x)))
+        
+        for i in range(len(coordenadas_x)):
+            x, y = coordenadas_x[i], coordenadas_y[i]
+            q1, q2, d = Cuarto(x, y, i, d, seleccion)
+            MoverServo(q1, q2)
+            self.plot_path(None, None, d, i, True)
+            sleep(0.15)
+
     def plot_path(self, x, y, d, i, line):
+
         if (x is None) and (y is None) and (line == False):
             self.fig1.plot(d[0,i],d[1,i],d[2,i],'.b')
         
