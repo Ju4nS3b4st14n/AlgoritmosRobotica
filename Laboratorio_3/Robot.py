@@ -145,4 +145,6 @@ def Cuarto(x, y, i, d, seleccion):
     MTH = Robot.fkine([q1,q2])
     d[:, i] =  MTH.t
 
+    robot_instance.plot([q1, q2], backend='pyplot', limits=[-20, 20, -20, 20, -20, 20])
+
     return q1, q2, d
