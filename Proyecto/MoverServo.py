@@ -40,16 +40,16 @@ def MoverServo(q1, q2, q3, q4):
     elif  q4 == 180:
         q4 = 175
 
-    pulse_width=int((q1/21)*(servo_max-servo_min)+servo_min)
+    pulse_width=int((q1/11)*(servo_max-servo_min)+servo_min)
     pca.channels[15].duty_cycle=pulse_width
        
-    pulse_width=int((q2/25)*(servo_max-servo_min)+servo_min)
-    pca.channels[14].duty_cycle=pulse_width
+    pulse_width=int((q2/22)*(servo_max-servo_min)+servo_min)
+    pca.channels[10].duty_cycle=pulse_width
     
-    pulse_width=int((q3/21)*(servo_max-servo_min)+servo_min)
-    pca.channels[13].duty_cycle=pulse_width
+    pulse_width=int((q3/22)*(servo_max-servo_min)+servo_min)
+    pca.channels[0].duty_cycle=pulse_width
 
-    pulse_width=int((q4/11)*(servo_max-servo_min)+servo_min)
+    pulse_width=int((q4/24)*(servo_max-servo_min)+servo_min)
     pca.channels[12].duty_cycle=pulse_width
 
     time.sleep(0.09)

@@ -5,23 +5,7 @@ import math
 # Definir algunos colores comunes en formato RGB
 common_colors = {
     "red": (255, 0, 0),
-    "green": (0, 255, 0),
-    "blue": (0, 0, 255),
-    "yellow": (255, 255, 0),
-    "orange": (255, 165, 0),
-    "purple": (128, 0, 128),
-    "pink": (255, 192, 203),
-    "brown": (165, 42, 42),
-    "gray": (169, 169, 169),
-    "black": (0, 0, 0),
-    "white": (255, 255, 255),
-    "cyan": (0, 255, 255),
-    "magenta": (255, 0, 255),
-    "lime": (0, 255, 0),
-    "maroon": (128, 0, 0),
-    "olive": (128, 128, 0),
-    "navy": (0, 0, 128),
-    "teal": (0, 128, 128)
+    "green": (0, 255, 0)
 }
 
 # Función para calcular la distancia Euclidiana entre dos colores RGB
@@ -61,6 +45,7 @@ def identify_shape(contour):
         else:
             return "Rectángulo", (0, 0, 255)  # Rojo
     elif num_vertices > 4:
+        print("Circulo")
         return "Circulo", (255, 0, 0)  # Azul
     else:
         # Si no tiene los vértices suficientes, puede ser un círculo (aproximación por redondez)
@@ -143,10 +128,15 @@ for contour in contours:
     approx = cv2.approxPolyDP(contour, epsilon, True)
     
     # Dibujar el contorno y el nombre de la figura
-    cv2.drawContours(resized_image, [approx], -1, color, 2)
+    #cv2.drawContours(resized_image, [approx], -1, color, 2)
     x, y = approx.ravel()[0], approx.ravel()[1]  # Coordenadas para colocar el texto
     cv2.putText(resized_image, shape, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
 
-# Guardar la imagen con los contornos y la identificación de la figura
-cv2.imwrite("imagen_con_contornos.jpg", resized_image)
+# Dibujar los contornos directamente sobre la imagen original
+# Aquí, el color (0, 255, 0) es verde y el grosor de la línea es 2
+cv2.drawContours(resized_image, contours, -1, (0, 255, 0), 2)
+
+# Guardar la imagen con los contornos dibujados sobre la original
+cv2.imwrite("imagen.jpg", resized_image)
 print("Imagen con contornos guardada como 'imagen_con_contornos.jpg'")
+

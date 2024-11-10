@@ -22,7 +22,7 @@ def manualRobot(q1, q2, q3, q4):
     Robot = DHRobot(R, name='Bender')
     #print(Robot)
 
-    Robot.plot(q, backend='pyplot', limits=[-50,50,-50,50,-50,50])
+    #Robot.plot(q, backend='pyplot', limits=[-50,50,-50,50,-50,50])
 
     #zlim([-15,30]);
 
@@ -31,5 +31,3 @@ def manualRobot(q1, q2, q3, q4):
     #print(f"Roll, Pitch, Yaw = {tr2rpy(MTH.R, 'deg', 'zyx')}")
     #theta = Robot.ikine_6s(MTH,'llllll',)
     #print(f'theta1, theta2, theta3, theta4, theta5, theta6 = {theta}')
-
-    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

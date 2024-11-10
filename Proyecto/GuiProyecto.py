@@ -140,6 +140,7 @@ class Ui_MainWindow(object):
                 self.horizontalSlider_motor1.valueChanged.connect(self.manual)
                 self.horizontalSlider_motor2.valueChanged.connect(self.manual)
                 self.horizontalSlider_motor3.valueChanged.connect(self.manual)
+                self.horizontalSlider_motor4.valueChanged.connect(self.manual)
                 self.pushButton_go.clicked.connect(self.semi_auto)
         
        
@@ -203,12 +204,13 @@ class Ui_MainWindow(object):
                 q1 = theta1
                 q2 = theta2
                 q3 = theta3
+                q4 = theta4
 
                 if numpy.isnan(q1) or numpy.isnan(q2) or numpy.isnan(q3):
                         q1 = 0
                         q2 = 0
                         q3 = 0
-                self.mover_servo(q1,q2,q3)
+                self.mover_servo(q1,q2,q3,q4)
         
         
         def retranslateUi(self, MainWindow):
