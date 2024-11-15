@@ -60,83 +60,86 @@ def identify_shape(contour):
         else:
             return "Circulo", (255, 0, 0)  # Azul
 
-# Cargar la imagen desde un archivo
-image = cv2.imread('imagen.jpg')
+def figure():
 
-# Verificar que la imagen se cargó correctamente
-if image is None:
-    print("Error: No se pudo cargar la imagen.")
-    exit()
+    # Cargar la imagen desde un archivo
+    image = cv2.imread('imagen.jpg')
 
-# Redimensionar la imagen (opcional, para mejorar el rendimiento)
-new_width = 640  # Puedes ajustar el tamaño
-height, width = image.shape[:2]
-aspect_ratio = height / width
-new_height = int(new_width * aspect_ratio)
-resized_image = cv2.resize(image, (new_width, new_height))
+    # Verificar que la imagen se cargó correctamente
+    if image is None:
+        print("Error: No se pudo cargar la imagen.")
+        exit()
 
-# Convertir la imagen redimensionada a escala de grises
-gray = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
+    # Redimensionar la imagen (opcional, para mejorar el rendimiento)
+    new_width = 640  # Puedes ajustar el tamaño
+    height, width = image.shape[:2]
+    aspect_ratio = height / width
+    new_height = int(new_width * aspect_ratio)
+    resized_image = cv2.resize(image, (new_width, new_height))
 
-# Aplicar un desenfoque para reducir el ruido
-blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    # Convertir la imagen redimensionada a escala de grises
+    gray = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
 
-# Detectar bordes usando el operador Canny
-edges = cv2.Canny(blurred, 50, 150)
+    # Aplicar un desenfoque para reducir el ruido
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
-# Encontrar los contornos
-contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Detectar bordes usando el operador Canny
+    edges = cv2.Canny(blurred, 50, 150)
 
-# Verificar si se encontraron contornos
-if len(contours) == 0:
-    print("No se encontraron contornos.")
-else:
-    print(f"Se encontraron {len(contours)} contornos.")
+    # Encontrar los contornos
+    contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Crear una máscara en blanco (negra con los contornos blancos)
-mask = np.zeros(gray.shape, dtype=np.uint8)
+    # Verificar si se encontraron contornos
+    if len(contours) == 0:
+        print("No se encontraron contornos.")
+    else:
+        print(f"Se encontraron {len(contours)} contornos.")
 
-# Rellenar la máscara con los contornos detectados (blanco)
-cv2.drawContours(mask, contours, -1, (255), thickness=cv2.FILLED)
+    # Crear una máscara en blanco (negra con los contornos blancos)
+    mask = np.zeros(gray.shape, dtype=np.uint8)
 
-# Extraer los colores de la región de la figura usando la máscara
-masked_image = cv2.bitwise_and(resized_image, resized_image, mask=mask)
+    # Rellenar la máscara con los contornos detectados (blanco)
+    cv2.drawContours(mask, contours, -1, (255), thickness=cv2.FILLED)
 
-# Calcular el promedio de color en la máscara (la figura)
-mean_color = cv2.mean(resized_image, mask=mask)
+    # Extraer los colores de la región de la figura usando la máscara
+    masked_image = cv2.bitwise_and(resized_image, resized_image, mask=mask)
 
-# Obtener el color promedio en formato BGR
-mean_bgr = mean_color[:3]
-print(f"Promedio de color (BGR): {mean_bgr}")
+    # Calcular el promedio de color en la máscara (la figura)
+    mean_color = cv2.mean(resized_image, mask=mask)
 
-if mean_bgr[1] > mean_bgr[0] and mean_bgr[1] > mean_bgr[2]:
-    color_figure = (0, 255, 0)
-elif mean_bgr[2] > mean_bgr[0] and mean_bgr[2] > mean_bgr[1]:
-    color_figure = (255, 0, 0)
-else:
-    print("No se detecta el color claramente, revisar iluminación del ambiente")
+    # Obtener el color promedio en formato BGR
+    mean_bgr = mean_color[:3]
+    print(f"Promedio de color (BGR): {mean_bgr}")
 
-# Encontrar el nombre del color más cercano
-color_name = closest_color(color_figure)
-print(f"Nombre aproximado del color: {color_name}")
+    if mean_bgr[1] > mean_bgr[0] and mean_bgr[1] > mean_bgr[2]:
+        color_figure = (0, 255, 0)
+    elif mean_bgr[2] > mean_bgr[0] and mean_bgr[2] > mean_bgr[1]:
+        color_figure = (255, 0, 0)
+    else:
+        print("No se detecta el color claramente, revisar iluminación del ambiente")
 
-# Identificar la figura en cada contorno
-for contour in contours:
-    shape, color = identify_shape(contour)
-    # Aproximar el contorno y dibujar la figura
-    epsilon = 0.04 * cv2.arcLength(contour, True)
-    approx = cv2.approxPolyDP(contour, epsilon, True)
-    
-    # Dibujar el contorno y el nombre de la figura
-    #cv2.drawContours(resized_image, [approx], -1, color, 2)
-    x, y = approx.ravel()[0], approx.ravel()[1]  # Coordenadas para colocar el texto
-    cv2.putText(resized_image, shape, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
+    # Encontrar el nombre del color más cercano
+    color_name = closest_color(color_figure)
+    print(f"Nombre aproximado del color: {color_name}")
 
-# Dibujar los contornos directamente sobre la imagen original
-# Aquí, el color (0, 255, 0) es verde y el grosor de la línea es 2
-cv2.drawContours(resized_image, contours, -1, (0, 255, 0), 2)
+    # Identificar la figura en cada contorno
+    for contour in contours:
+        shape, color = identify_shape(contour)
+        # Aproximar el contorno y dibujar la figura
+        epsilon = 0.04 * cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, epsilon, True)
+        
+        # Dibujar el contorno y el nombre de la figura
+        #cv2.drawContours(resized_image, [approx], -1, color, 2)
+        x, y = approx.ravel()[0], approx.ravel()[1]  # Coordenadas para colocar el texto
+        cv2.putText(resized_image, shape, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
 
-# Guardar la imagen con los contornos dibujados sobre la original
-cv2.imwrite("imagen.jpg", resized_image)
-print("Imagen con contornos guardada como 'imagen_con_contornos.jpg'")
+    # Dibujar los contornos directamente sobre la imagen original
+    cv2.drawContours(resized_image, contours, -1, (0, 255, 0), 2)
+
+    # Guardar la imagen con los contornos dibujados sobre la original
+    image_figute = cv2.imwrite("imagen.jpg", resized_image)
+    print("Imagen con contornos guardada como 'imagen.jpg'")
+
+    return color_name
 

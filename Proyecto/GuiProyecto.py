@@ -1,12 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import time   
-from adafruit_servokit import ServoKit 
 import sys
-import board
 import matplotlib
 matplotlib.use('Qt5Agg')
-import busio
-from adafruit_pca9685 import PCA9685
 import math
 import numpy
 from sympy import *
@@ -15,7 +11,9 @@ from ForwardKinematics3R import *
 from MoverServo import *
 import matplotlib.pyplot as plt
 from Robot import *
-   
+from Camera import *
+from ImageCamera import figure
+from Sensors import *
 
 
 class Ui_MainWindow(object):
@@ -107,7 +105,7 @@ class Ui_MainWindow(object):
                 self.label_12 = QtWidgets.QLabel(self.centralwidget)
                 self.label_12.setGeometry(QtCore.QRect(270, 400, 200, 200))
                 self.label_12.setText("")
-                self.label_12.setPixmap(QtGui.QPixmap("/home/luis/Documentos/logo-universidad-ecci (1).png"))
+                self.label_12.setPixmap(QtGui.QPixmap("/home/santana19/Documentos/AlgoritmosRobotica/Imagenes/images.png"))
                 self.label_12.setObjectName("label_12")
                 self.label_13 = QtWidgets.QLabel(self.centralwidget)
                 self.label_13.setGeometry(QtCore.QRect(10, 460, 241, 31))
@@ -132,16 +130,15 @@ class Ui_MainWindow(object):
         
                 self.retranslateUi(MainWindow)
                 QtCore.QMetaObject.connectSlotsByName(MainWindow)
-                self.i2c=busio.I2C(board.SCL,board.SDA)
-                self.pca=PCA9685(self.i2c)
-                self.pca.frequency=60
-                self.servo_min=980
-                self.servo_max=1970
                 self.horizontalSlider_motor1.valueChanged.connect(self.manual)
                 self.horizontalSlider_motor2.valueChanged.connect(self.manual)
                 self.horizontalSlider_motor3.valueChanged.connect(self.manual)
                 self.horizontalSlider_motor4.valueChanged.connect(self.manual)
                 self.pushButton_go.clicked.connect(self.semi_auto)
+                self.pushButton_start.clicked.connect(self.automatic)
+                self.pushButton_pick.clicked.connect(self.open)
+                self.pushButton_PLACE.clicked.connect(self.close)
+                
         
        
         def manual(self):
@@ -158,9 +155,17 @@ class Ui_MainWindow(object):
                 #q3 = theta3
                 #q4 = theta4
                 q4 = int(numpy.deg2rad(theta4))
-                print(f"q1 {theta1}, q2 {theta2}, q3 {q3}, q4 {q4}")
-                MoverServo(theta1, theta2, theta3, theta4)
-                manualRobot(q1, q2, q3, q4)
+
+                Sensor1, sensor2 = sensor()
+
+                if Sensor1 == 0 or sensor2 == 0:
+                        return
+                else:
+                        MoverServo(theta1, theta2, theta3, theta4)
+
+                        
+                #print(f"q1 {theta1}, q2 {theta2}, q3 {q3}, q4 {q4}")
+                #manualRobot(q1, q2, q3, q4)
        
         def semi_auto(self):
                 l1 = 4
@@ -210,8 +215,39 @@ class Ui_MainWindow(object):
                         q1 = 0
                         q2 = 0
                         q3 = 0
-                self.mover_servo(q1,q2,q3,q4)
-        
+                # self.mover_servo(q1,q2,q3,q4)
+
+        def automatic(self):
+
+                image = photo()
+                show_image(image)
+                color = figure()
+                show_image(image)
+
+                MoverServoAuto("B")
+                print(color)
+
+                if color == "green":
+                        print("punto C")
+                        MoverServoAuto("C")
+                elif color == "red":
+                        print("Punto A")
+                        MoverServoAuto("A")
+                else:
+                        print("Color diferente al rojo o verde")        
+
+
+        def open(self):
+
+                q = int(numpy.deg2rad(90))
+
+                gripperopen(q)
+
+        def close(self):
+
+                q = int(numpy.deg2rad(0))
+
+                gripperclose(q)
         
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
@@ -232,11 +268,9 @@ class Ui_MainWindow(object):
                 self.pushButton_go.setText(_translate("MainWindow", "GO!"))
                 self.label_11.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#aa557f;\">MODO:AUTOMATICO</span></p></body></html>"))
                 self.pushButton_start.setText(_translate("MainWindow", "¡START!"))
-                self.label_13.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Luis Alfonso Cardozo Sarmiento</span></p></body></html>"))
-                self.label_14.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Cesar Mauricio Rocha</span></p></body></html>"))
-                self.label_15.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Diego Alejandro Celemin</span></p></body></html>"))
-                self.label_16.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Cristian Amaya</span></p></body></html>"))
-      
+                self.label_13.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Juan Sebastian Torres</span></p></body></html>"))
+                self.label_14.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Fabian Camilo Vasquez</span></p></body></html>"))
+                self.label_15.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Reynaldo Alonso Alape</span></p></body></html>"))
         
        
 
